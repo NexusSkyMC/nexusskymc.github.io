@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS SKY - REVAMP | MCPE 0.15.10 Sol's RNG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark Theme Variables */
+            --bg-main: #05060f;
+            --bg-nav: rgba(10, 13, 28, 0.75);
+            --card-bg: rgba(13, 16, 35, 0.7);
+            --card-border: rgba(138, 43, 226, 0.3);
+            --text-main: #f0f3ff;
+            --text-muted: #9ba3c7;
+            --primary-glow: #8a2be2;
+            --accent-cyan: #00f0ff;
+            --accent-pink: #ff007f;
+            --accent-gold: #ffaa00;
+            --accent-green: #00ff88;
+            --input-bg: rgba(0, 0, 0, 0.4);
+            --shadow-color: rgba(0, 240, 255, 0.2);
+            --bg-particle: #00f0ff;
+        }
+
+        [data-theme="light"] {
+            /* Light Theme Variables */
+            --bg-main: #f4f6fc;
+            --bg-nav: rgba(255, 255, 255, 0.88);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(138, 43, 226, 0.25);
+            --text-main: #121629;
+            --text-muted: #555e7d;
+            --primary-glow: #7010d0;
+            --accent-cyan: #0077ff;
+            --accent-pink: #d8006f;
+            --accent-gold: #d97700;
+            --accent-green: #00a859;
+            --input-bg: rgba(230, 235, 250, 0.9);
+            --shadow-color: rgba(112, 16, 208, 0.15);
+            --bg-particle: #7010d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Live Canvas Background */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--bg-nav);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 15px;
+            z-index: 99;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--text-main), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-cyan);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent-cyan);
+            transform: scale(1.05);
+        }
+
+        /* Hero Header */
+        header {
+            text-align: center;
+            padding: 2rem 1rem 3rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(138, 43, 226, 0.15);
+            border: 1px solid var(--card-border);
+            color: var(--accent-cyan);
+            padding: 0.5rem 1.4rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .version-tag {
+            background: var(--accent-pink);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.3); }
+            100% { opacity: 0.4; transform: scale(0.9); }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--text-main) 20%, var(--accent-cyan) 60%, var(--primary-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 780px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        /* Server Connection Box */
+        .server-connection-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            backdrop-filter: blur(15px);
+        }
+
+        .connection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-field {
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .editable-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--accent-cyan);
+            color: var(--accent-gold);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            outline: none;
+            letter-spacing: 2px;
+        }
+
+        .copy-btn {
+            margin-top: 0.6rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--accent-cyan);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+            color: #fff;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 35px var(--accent-cyan);
+        }
+
+        /* Server Live Stats Counter Bar */
+        .live-stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* RNG Roll Simulator */
+        .rng-simulator {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            margin: 4rem 0;
+            backdrop-filter: blur(12px);
+        }
+
+        .roll-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin: 1.5rem 0;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+        }
+
+        .roll-btn {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--primary-glow));
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 0.9rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .roll-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            margin: 4rem 0 2rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        /* Exactly 5 Features Grid */
+        .grid-5 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* FAQ Section */
+        .faq-accordion {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.2rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        /* Footer */
+        .footer-banner {
+            margin: 5rem 0 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--accent-cyan);
+            color: #000;
+            font-weight: 800;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LIVE HIGH-VISIBILITY CANVAS ANIMATED BACKGROUND -->
+    <canvas id="space-canvas"></canvas>
+
+    <div class="container">
+        <!-- Top Navigation with Theme Toggle -->
+        <nav>
+            <div class="nav-logo">🌌 NEXUS SKY</div>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="#connect">Server IP</a>
+                    <a href="#simulator">Try RNG</a>
+                    <a href="#features">Top 5 Features</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <button class="theme-toggle-btn" onclick="toggleTheme()" id="theme-btn">
+                    🌙 Dark Theme
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Header -->
+        <header>
+            <div class="badge">
+                <span class="pulse-dot"></span>
+                MCPE 0.15.10 EXCLUSIVE <span class="version-tag">0.15.10</span>
+            </div>
+            <h1>NEXUS SKY</h1>
+            <p class="subtitle">After years away... the legendary server is BACK! Rebuilt on PocketMine for Minecraft PE 0.15.10 into a custom Sol's RNG experience.</p>
+        </header>
+
+        <!-- Server IP / Connection Card -->
+        <div class="server-connection-box" id="connect">
+            <div class="connection-grid">
+                <div class="info-field">
+                    <span class="info-label">Server IP / Address</span>
+                    <input type="text" id="ip-input" class="editable-field" value="SOON" readonly>
+                    <button class="copy-btn" onclick="copyFieldValue('ip-input', 'IP Address')">Copy IP</button>
+                </div>
+                <div class="info-field">
+                    <span class="info-label">Port (Bedrock / PE)</span>
+                    <input type="text" id="port-input" class="editable-field" value="SOON" readonly>
+                    <button class="copy-btn" onclick="copyFieldValue('port-input', 'Port')">Copy Port</button>
+                </div>
+                <div class="info-field">
+                    <span class="info-label">Required MCPE Version</span>
+                    <div style="font-size: 1.1rem; color: var(--accent-cyan); font-weight:700; margin-top:4px;">MCPE 0.15.10 Only</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">PocketMine-MP Engine</div>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="https://discord.gg/9sszZM5ANc" target="_blank" class="cta-button cta-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    Join Official Discord
+                </a>
+            </div>
+        </div>
+
+        <!-- Live Server Stats Bar -->
+        <div class="live-stats-bar">
+            <div class="stat-box">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Custom Auras</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0.15.10</div>
+                <div class="stat-label">MCPE Native</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Auto-Roll Support</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0ms</div>
+                <div class="stat-label">Packet Delay</div>
+            </div>
+        </div>
+
+        <!-- Interactive Sol's RNG Web Simulator -->
+        <div class="rng-simulator" id="simulator">
+            <span class="badge">Interactive Web Simulator</span>
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; margin-top: 0.5rem;">Test Your MCPE 0.15.10 Roll Luck</h3>
+            <div class="roll-display" id="roll-result">✨ Click ROLL to test your odds! ✨</div>
+            <button class="roll-btn" onclick="testRoll()">🎲 ROLL AURA</button>
+        </div>
+
+        <!-- Exactly 5 Main Reasons To Play Section -->
+        <h2 class="section-title" id="features">✨ 5 Reasons To Play Nexus Sky</h2>
+
+        <div class="grid-5">
+            <div class="card">
+                <div class="card-icon">🎲</div>
+                <h3>1. MCPE 0.15.10 Sol's RNG</h3>
+                <p>Built specifically for MCPE 0.15.10 with zero lag. Roll for over 100+ hyper-rare custom particle auras!</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚒️</div>
+                <h3>2. Crafting & Luck Gauntlets</h3>
+                <p>Gather materials and craft powerful gauntlets and speed gear to multiply your luck and roll faster.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📱</div>
+                <h3>3. Tablet & Mobile Optimized</h3>
+                <p>Custom FormAPI interfaces, ShopGUI, and auto-roll controls tweaked specifically for smooth tablet tapping.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">👑</div>
+                <h3>4. Global Luck Leaderboards</h3>
+                <p>Compete live against players worldwide to pull the rarest Celestial and Mythic auras on the server.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌌</div>
+                <h3>5. Revived Nostalgia Community</h3>
+                <p>The original Nexus Sky community you loved back in the day, fully modernized with custom PHP plugins!</p>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <h2 class="section-title" id="faq">❓ MCPE 0.15.10 FAQ</h2>
+        <div class="faq-accordion">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">How do I join on MCPE 0.15.10? <span>+</span></button>
+                <div class="faq-answer">Make sure you are playing on Minecraft PE 0.15.10. Join our Discord for the exact IP & Port as soon as server launch drops!</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">How does Auto-Rolling work on mobile/tablet? <span>+</span></button>
+                <div class="faq-answer">Simply tap the Auto-Roll toggle button in the server GUI menu or type <code>/autoroll</code> in chat to let the server roll for you 24/7!</div>
+            </div>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            <h2>Ready to Test Your 0.15.10 Luck?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Join the Discord server to get notified immediately when the IP drops!</p>
+            <a href="https://discord.gg/9sszZM5ANc" target="_blank" class="cta-button cta-primary">Step Into Nexus Sky</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Nexus Sky - Revamp • MCPE 0.15.10. All rights reserved.
+    </footer>
+
+    <div id="toast">Copied to clipboard!</div>
+
+    <script>
+        /* PROPER LIVE CANVAS ANIMATED BACKGROUND */
+        const canvas = document.getElementById('space-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.radius = Math.random() * 2.5 + 1;
+                this.vy = -(Math.random() * 0.8 + 0.3); // Upward movement
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.alpha = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.y += this.vy;
+                this.x += this.vx;
+                if (this.y < 0) { this.y = height; this.x = Math.random() * width; }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-particle').trim();
+                ctx.globalAlpha = this.alpha;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 85; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        /* Theme Toggle Handler (Light/Dark) */
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            const themeBtn = document.getElementById('theme-btn');
+            themeBtn.innerText = newTheme === 'light' ? '☀️ Light Theme' : '🌙 Dark Theme';
+        }
+
+        /* Copy Utility */
+        function copyFieldValue(id, label) {
+            const val = document.getElementById(id).value;
+            navigator.clipboard.writeText(val).then(() => showToast(`${label}: ${val}`));
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.className = 'show';
+            setTimeout(() => { toast.className = ''; }, 3000);
+        }
+
+        /* Sol's RNG Roll Simulator */
+        const auras = [
+            { name: "Common - Basic Spark", color: "#9ba3c7", rarity: "1 in 2" },
+            { name: "Uncommon - Neon Aura", color: "#00f0ff", rarity: "1 in 15" },
+            { name: "Rare - Starlight-Glow", color: "#ffaa00", rarity: "1 in 250" },
+            { name: "Epic - Aether-Flame", color: "#8a2be2", rarity: "1 in 5,000" },
+            { name: "MYTHIC - Overdrive-Void", color: "#ff007f", rarity: "1 in 150,000" },
+            { name: "🌌 CELESTIAL - Glitch-Nova 🌌", color: "#00ff88", rarity: "1 in 2,500,000" }
+        ];
+
+        function testRoll() {
+            const display = document.getElementById('roll-result');
+            display.innerText = "🎲 Rolling...";
+            setTimeout(() => {
+                const rand = Math.random();
+                let sel = auras[0];
+                if (rand > 0.999) sel = auras[5];
+                else if (rand > 0.99) sel = auras[4];
+                else if (rand > 0.95) sel = auras[3];
+                else if (rand > 0.8) sel = auras[2];
+                else if (rand > 0.5) sel = auras[1];
+                display.style.color = sel.color;
+                display.innerText = `${sel.name} (${sel.rarity})`;
+            }, 300);
+        }
+
+        /* FAQ Accordion Toggle */
+        function toggleFaq(btn) {
+            const ans = btn.nextElementSibling;
+            ans.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
