@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS SKY - SPOOKY HALLOWEEN | MCPE 0.15.10 Sol's RNG</title>
+    <title>NEXUS SKY - MCPE 0.15.10 Sol's RNG Server</title>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
@@ -11,37 +12,43 @@
 </head>
 <body>
 
+    <!-- Dynamic Halloween Background Canvas -->
     <canvas id="halloween-canvas"></canvas>
 
-    <div class="container">
+    <div class="site-wrapper">
+        
         <!-- Navigation Header -->
-        <nav>
+        <nav class="navbar">
             <div class="brand-container">
-                <svg class="svg-logo" viewBox="0 0 100 100">
+                <svg class="brand-svg" viewBox="0 0 100 100">
                     <rect width="100" height="100" rx="22" fill="#18082a" stroke="#ff7700" stroke-width="4"/>
-                    <path d="M 30 75 L 30 25 L 45 25 L 70 75 L 70 25" stroke="#ffaa00" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" />
-                    <circle cx="75" cy="25" r="5" fill="#00ff66" />
+                    <path d="M 30 75 L 30 25 L 45 25 L 70 75 L 70 25" stroke="#ffaa00" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <circle cx="75" cy="25" r="6" fill="#00ff66"/>
                 </svg>
-                <div class="nav-logo">NEXUS SKY</div>
-            </div>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="#connect">Server IP</a>
-                    <a href="#simulator">Roll RNG</a>
-                    <a href="#auras">100+ Auras</a>
-                    <a href="#features">Features</a>
-                    <a href="#faq">FAQ</a>
+                <div class="brand-text">
+                    <span class="brand-title">NEXUS SKY</span>
+                    <span class="brand-subtitle">SOL'S RNG • MCPE 0.15.10</span>
                 </div>
-                <button class="theme-toggle-btn" onclick="toggleTheme()" id="theme-btn">
+            </div>
+
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#connect">Connect</a></li>
+                    <li><a href="#simulator">RNG Simulator</a></li>
+                    <li><a href="#auras">Aura Index (100+)</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">
                     🎃 Spooky Night
                 </button>
             </div>
         </nav>
 
-        <!-- Hero Header -->
-        <header>
-            <div class="hero-pumpkin-wrapper">
-                <svg class="hero-pumpkin-svg" viewBox="0 0 100 100">
+        <!-- Hero Section -->
+        <header class="hero-section">
+            <div class="hero-pumpkin-container">
+                <svg class="pumpkin-svg" viewBox="0 0 100 100">
                     <ellipse cx="50" cy="55" rx="42" ry="35" fill="#ff6600"/>
                     <ellipse cx="35" cy="55" rx="25" ry="33" fill="#e65100"/>
                     <ellipse cx="65" cy="55" rx="25" ry="33" fill="#e65100"/>
@@ -53,148 +60,222 @@
                     <path d="M 28 65 Q 50 82 72 65 Q 65 72 50 72 Q 35 72 28 65 Z" fill="#ffff00"/>
                 </svg>
             </div>
-            <div>
-                <div class="badge">
-                    <span class="pulse-dot"></span>
-                    MCPE 0.15.10 HALLOWEEN EDITION <span class="version-tag">0.15.10</span>
-                </div>
+
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                SERVER IS OFFICIALLY LIVE! <span class="version-tag">MCPE 0.15.10</span>
             </div>
-            <h1>NEXUS SKY</h1>
-            <p class="subtitle">The legendary MCPE 0.15.10 server is back! Experience custom PocketMine Sol's RNG, explore worlds for sparkle stones, and unlock over 100+ hyper-rare Sol-type Auras.</p>
+
+            <h1 class="hero-title">NEXUS SKY</h1>
+            <p class="hero-description">
+                Step into the ultimate PocketMine-MP Sol's RNG experience! Explore dimension worlds for Sparkle Stones, craft overpowered Luck Gauntlets, and roll over 100+ hyper-rare aura particles with custom ShopGUI & tablet-optimized controls.
+            </p>
+
+            <div class="hero-cta-group">
+                <a href="#connect" class="cta-btn cta-primary">Join Server Now</a>
+                <a href="#simulator" class="cta-btn cta-secondary">Try Web RNG Roll</a>
+            </div>
         </header>
 
-        <!-- Connection Details Card -->
-        <div class="server-connection-box" id="connect">
-            <div class="connection-grid">
-                <div class="info-field">
-                    <span class="info-label">Server IP / Address</span>
-                    <input type="text" id="ip-input" class="editable-field" value="SOON" readonly>
-                    <button class="copy-btn" onclick="copyFieldValue('ip-input', 'IP Address')">Copy IP</button>
+        <!-- Server Connection Credentials -->
+        <section class="connect-card" id="connect">
+            <h2 class="card-heading">🔮 Connect to Server</h2>
+            <p class="card-subheading">Copy credentials directly into Minecraft Pocket Edition 0.15.10</p>
+
+            <div class="fields-grid">
+                <div class="field-box">
+                    <span class="field-label">Server Domain / IP</span>
+                    <div class="input-wrapper">
+                        <input type="text" id="server-ip" value="NEXUSRNG.ddns.net" readonly>
+                        <button class="copy-action-btn" onclick="copyText('server-ip', 'Server IP')">Copy IP</button>
+                    </div>
                 </div>
-                <div class="info-field">
-                    <span class="info-label">Port (Bedrock / PE)</span>
-                    <input type="text" id="port-input" class="editable-field" value="SOON" readonly>
-                    <button class="copy-btn" onclick="copyFieldValue('port-input', 'Port')">Copy Port</button>
+
+                <div class="field-box">
+                    <span class="field-label">Port Number</span>
+                    <div class="input-wrapper">
+                        <input type="text" id="server-port" value="10026" readonly>
+                        <button class="copy-action-btn" onclick="copyText('server-port', 'Port')">Copy Port</button>
+                    </div>
                 </div>
-                <div class="info-field">
-                    <span class="info-label">Target Platform</span>
-                    <div style="font-size: 1.1rem; color: var(--accent-orange); font-weight:700; margin-top:4px;">MCPE 0.15.10</div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">PocketMine-MP Engine</div>
+
+                <div class="field-box">
+                    <span class="field-label">Engine & Client</span>
+                    <div class="field-static-val">PocketMine-MP (0.15.10)</div>
                 </div>
             </div>
 
-            <div class="cta-group">
-                <a href="https://discord.gg/9sszZM5ANc" target="_blank" class="cta-button cta-primary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                    Join Official Discord
-                </a>
+            <div class="discord-banner">
+                <span>💬 Need assistance or want to flex your rare rolls?</span>
+                <a href="https://discord.gg/9sszZM5ANc" target="_blank" class="discord-btn">Join Official Discord</a>
             </div>
-        </div>
+        </section>
 
-        <!-- Live Server Stats Bar -->
-        <div class="live-stats-bar">
-            <div class="stat-box">
-                <div class="stat-number">100+</div>
-                <div class="stat-label">Sol-Type Auras</div>
+        <!-- Live Server Statistics Bar -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val" id="stat-auras">100+</div>
+                <div class="stat-title">Unique Particle Auras</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-number">0.15.10</div>
-                <div class="stat-label">MCPE Native</div>
+            <div class="stat-card">
+                <div class="stat-val">0.15.10</div>
+                <div class="stat-title">Native MCPE Version</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Auto-Roll Support</div>
+            <div class="stat-card">
+                <div class="stat-val">24/7</div>
+                <div class="stat-title">Uptime & Auto-Roll</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-number">🎃</div>
-                <div class="stat-label">Halloween Event</div>
+            <div class="stat-card">
+                <div class="stat-val">🎃 LIVE</div>
+                <div class="stat-title">Halloween Season</div>
             </div>
-        </div>
+        </section>
 
-        <!-- Interactive Sol's RNG Web Simulator -->
-        <div class="rng-simulator" id="simulator">
-            <span class="badge">🎃 Interactive Web Simulator</span>
-            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; margin-top: 0.5rem;">Test Your MCPE 0.15.10 Roll Luck</h3>
-            
-            <div class="roll-display-box">
-                <div class="roll-title" id="roll-name">✨ Click ROLL AURA to test your odds! ✨</div>
-                <div class="roll-rarity" id="roll-chance">Over 100+ Custom Auras Loaded</div>
+        <!-- Interactive Sol's RNG Simulator -->
+        <section class="simulator-card" id="simulator">
+            <div class="sim-badge">🎲 WEB ROLL ENGINE</div>
+            <h2 class="sim-title">Test Your Sol's RNG Luck</h2>
+            <p class="sim-desc">Simulate actual in-game probabilities! Can you land a 1 in 100,000,000+ Apex Aura?</p>
+
+            <div class="roll-display" id="roll-display-box">
+                <div class="roll-aura-name" id="display-aura-name">READY TO ROLL</div>
+                <div class="roll-aura-chance" id="display-aura-chance">Click the button below to test your RNG</div>
             </div>
 
-            <button class="roll-btn" onclick="rollAuraSimulator()">🎲 ROLL AURA</button>
-        </div>
+            <div class="sim-controls">
+                <button class="roll-trigger-btn" onclick="triggerWebRoll()">🎲 ROLL AURA</button>
+                <button class="auto-roll-btn" id="auto-roll-toggle" onclick="toggleAutoRoll()">⚡ Auto Roll: OFF</button>
+            </div>
 
-        <!-- 100+ Sol-Type Aura Showcase Catalog -->
-        <div class="aura-catalog-container" id="auras">
-            <div class="catalog-header">
+            <!-- Roll History Log -->
+            <div class="history-container">
+                <div class="history-title">Recent Roll History</div>
+                <div class="history-list" id="roll-history-list">
+                    <div class="history-empty">No rolls yet. Hit Roll Aura!</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 100+ Custom Aura Registry -->
+        <section class="aura-section" id="auras">
+            <div class="aura-header">
                 <div>
-                    <h2 style="font-family:'Creepster', cursive; font-size: 2rem; color: var(--accent-orange);">✨ 100+ Sol-Type Aura Index</h2>
-                    <p style="font-size:0.85rem; color: var(--text-muted);">Explore a preview of the 100+ Sol-type custom auras in Nexus Sky!</p>
+                    <h2 class="aura-title">✨ 100+ Sol-Type Aura Index</h2>
+                    <p class="aura-subtitle">Complete registry of particle effects, rarities, and Halloween exclusives.</p>
                 </div>
-                <input type="text" id="aura-search" class="search-aura-input" placeholder="Search aura..." oninput="filterAuras()">
+                <div class="aura-filter-box">
+                    <input type="text" id="aura-search-input" class="aura-search-input" placeholder="Search aura name..." oninput="filterAuraCatalog()">
+                </div>
             </div>
-            <div class="aura-grid" id="aura-grid-display"></div>
-        </div>
 
-        <!-- Features -->
-        <h2 class="section-title" id="features">👻 Why Play Nexus Sky?</h2>
-        <div class="grid-5">
-            <div class="card">
-                <div class="card-icon">🎃</div>
-                <h3>1. 100+ Sol-Type Auras</h3>
-                <p>Roll for over 100+ custom particle auras ranging from Common to Galactic, Spooky, and Divine rarities!</p>
+            <!-- Category Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" onclick="setAuraFilter('all', this)">All Auras</button>
+                <button class="tab-btn" onclick="setAuraFilter('standard', this)">Standard</button>
+                <button class="tab-btn" onclick="setAuraFilter('halloween', this)">🎃 Halloween</button>
+                <button class="tab-btn" onclick="setAuraFilter('celestial', this)">🌌 Celestial/Sol</button>
             </div>
-            <div class="card">
-                <div class="card-icon">💎</div>
-                <h3>2. Sparkle Stones & Worlds</h3>
-                <p>Explore different world dimensions to mine and collect rare Sparkle Stones to boost your luck multipliers.</p>
+
+            <div class="aura-grid" id="aura-grid">
+                <!-- Aura cards rendered dynamically by JavaScript -->
             </div>
-            <div class="card">
-                <div class="card-icon">⚒️</div>
-                <h3>3. Luck Gauntlets & Gear</h3>
-                <p>Craft custom gauntlets, potions, and speed artifacts using PocketMine-MP custom recipes.</p>
+        </section>
+
+        <!-- Feature Cards -->
+        <h2 class="section-heading" id="features">👻 Nexus Sky Features</h2>
+        <section class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎃</div>
+                <h3>100+ Sol-Type Auras</h3>
+                <p>Roll through a vast library of custom particle effects, from Common to 1 in 500,000,000+ Omnipotent aura states.</p>
             </div>
-            <div class="card">
-                <div class="card-icon">📱</div>
-                <h3>4. Optimized MCPE 0.15.10</h3>
-                <p>Built specifically for MCPE 0.15.10 with custom FormAPI menus, ShopGUI, and tablet-friendly UI.</p>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Sparkle Stone Worlds</h3>
+                <p>Travel through custom world dimensions, mine Sparkle Stones, and trade them for server gear.</p>
             </div>
-            <div class="card">
-                <div class="card-icon">🏆</div>
-                <h3>5. Global Luck Leaderboards</h3>
-                <p>Compete against players worldwide to pull rare 1 in 10,000,000+ Celestial and Haunted Auras!</p>
+            <div class="feature-card">
+                <div class="feature-icon">⚒️</div>
+                <h3>Luck Gauntlets & Gear</h3>
+                <p>Craft custom PocketMine-MP gauntlets, luck potions, and speed artifacts to accelerate your roll cooldowns.</p>
             </div>
-        </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>MCPE 0.15.10 Native</h3>
+                <p>Built specifically for MCPE 0.15.10 with fast FormAPI menus, custom ShopGUI, and full tablet touch responsiveness.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Global Leaderboards</h3>
+                <p>Compete on global server leaderboards to display your rarest aura pulls to the entire community.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>24/7 Auto-Roll Engine</h3>
+                <p>Use in-game <code>/autoroll</code> commands to continue rolling even when AFK in safe zones.</p>
+            </div>
+        </section>
 
         <!-- FAQ Section -->
-        <h2 class="section-title" id="faq">❓ Spooky FAQ</h2>
-        <div class="faq-accordion">
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">When is it going to be public? <span>+</span></button>
-                <div class="faq-answer">Within this month! Get ready to explore different worlds for sparkle stones!</div>
+        <h2 class="section-heading" id="faq">❓ Server FAQ</h2>
+        <section class="faq-container">
+            <div class="faq-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is the server online and playable right now?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Yes! The server is live on IP <code>NEXUSRNG.ddns.net</code> and Port <code>10026</code>.
+                </div>
             </div>
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">How do I join on MCPE 0.15.10? <span>+</span></button>
-                <div class="faq-answer">Ensure you have Minecraft PE version 0.15.10 installed on your device. Join our Discord for the exact IP & Port as soon as server launch drops!</div>
+
+            <div class="faq-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I join on Android or Tablet with MCPE 0.15.10?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Open Minecraft PE 0.15.10 $\rightarrow$ Play $\rightarrow$ External / Add Server $\rightarrow$ Enter Server Name as <b>NEXUS SKY</b>, IP as <b>NEXUSRNG.ddns.net</b>, Port as <b>10026</b>, and click Save or Join!
+                </div>
             </div>
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">How does Auto-Rolling work on mobile? <span>+</span></button>
-                <div class="faq-answer">You can toggle Auto-Roll through the custom in-game GUI menu or by typing <code>/autoroll</code> in chat for continuous 24/7 rolling!</div>
+
+            <div class="faq-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I open the main menu in-game?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Type <code>/menu</code> or <code>/rng</code> in the chat window to open the custom FormAPI menu to view your active aura, shop, gauntlets, and crafting tables.
+                </div>
             </div>
+
+            <div class="faq-card">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span>Are there special Halloween event items?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Yes! The Halloween update introduces special seasonal Auras (such as Pumpkin King, Blood Moon, Soul Reaper) and exclusive event quests.
+                </div>
+            </div>
+        </section>
+
+        <!-- Banner -->
+        <div class="cta-banner">
+            <h2>Ready to Test Your Sol's RNG Luck?</h2>
+            <p>Enter the server now and claim your first particle aura!</p>
+            <a href="#connect" class="cta-btn cta-primary">Connect to NEXUS SKY</a>
         </div>
 
-        <div class="footer-banner">
-            <h2 style="font-family:'Creepster', cursive; font-size: 2.5rem; color: var(--accent-orange); margin-bottom: 0.5rem;">Ready to Test Your Luck?</h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">Join our Discord community to get notified instantly when the server goes public this month!</p>
-            <a href="https://discord.gg/9sszZM5ANc" target="_blank" class="cta-button cta-primary">Step Into Nexus Sky</a>
-        </div>
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 NEXUS SKY - MCPE 0.15.10 Sol's RNG Server. All rights reserved.</p>
+        </footer>
+
     </div>
 
-    <footer>
-        &copy; 2026 Nexus Sky - Revamp • MCPE 0.15.10 Sol's RNG. All rights reserved.
-    </footer>
-
-    <div id="toast">Copied to clipboard!</div>
+    <!-- Notification Toast -->
+    <div id="toast-msg">Copied to clipboard!</div>
 
     <script src="script.js"></script>
 </body>
